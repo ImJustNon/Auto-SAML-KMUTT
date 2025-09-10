@@ -57,7 +57,7 @@ class SAMLCookies {
             }
             catch (_b) { }
             yield page.goto(this.kmuttLoginURL);
-            yield page.waitForTimeout(2000);
+            yield page.waitForTimeout(5000);
             const cookies = yield context.cookies();
             for (const c of cookies) {
                 if (["SimpleSAMLAuthToken", "SimpleSAMLphp"].includes(c.name)) {
