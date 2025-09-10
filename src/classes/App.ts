@@ -29,7 +29,7 @@ export class App {
 
     private initializeRoutes() {
         this.app.get('/api/saml', async (req, res) => {
-            const getsaml = new SAMLCookies(config.kmuttEmail!, config.kmuttPassword!);
+            const getsaml = new SAMLCookies(config.kmuttEmail!, config.kmuttPassword!, {isServerless: config.isServerless});
             await getsaml.loginAndGetSamlCookies();
 
             if(getsaml.getErrorMessage()) {

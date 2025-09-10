@@ -36,7 +36,7 @@ class App {
     }
     initializeRoutes() {
         this.app.get('/api/saml', (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const getsaml = new SAMLCookies_1.SAMLCookies(config_1.config.kmuttEmail, config_1.config.kmuttPassword);
+            const getsaml = new SAMLCookies_1.SAMLCookies(config_1.config.kmuttEmail, config_1.config.kmuttPassword, { isServerless: config_1.config.isServerless });
             yield getsaml.loginAndGetSamlCookies();
             if (getsaml.getErrorMessage()) {
                 return res.status(500).json({ message: getsaml.getErrorMessage() });

@@ -8,24 +8,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SAMLCookies = void 0;
-const playwright_1 = require("playwright");
+const playwright_core_1 = require("playwright-core");
+const chromium_1 = __importDefault(require("@sparticuz/chromium"));
 class SAMLCookies {
     constructor(email, password, option) {
-        var _a, _b;
         this.kmuttLoginURL = 'https://dl.lib.kmutt.ac.th/repository/loadfile.php?obj_id=5749';
         this.samlCookies = {};
         this.kmuttEmail = email;
         this.kmuttPassword = password;
+        this.isServerless = option.isServerless;
         this.browserOptions = {
-            headless: (_a = option === null || option === void 0 ? void 0 : option.headless) !== null && _a !== void 0 ? _a : true,
-            args: (_b = option === null || option === void 0 ? void 0 : option.args) !== null && _b !== void 0 ? _b : ['--no-sandbox', '--disable-setuid-sandbox'],
+            headless: true,
+            args: option.isServerless ? chromium_1.default.args : [],
         };
     }
     loginAndGetSamlCookies() {
         return __awaiter(this, void 0, void 0, function* () {
-            const browser = yield playwright_1.chromium.launch(this.browserOptions);
+            const browser = yield playwright_core_1.chromium.launch(Object.assign(Object.assign({}, this.browserOptions), { executablePath: this.isServerless ? yield chromium_1.default.executablePath() : undefined }));
             const context = yield browser.newContext();
             const page = yield context.newPage();
             yield page.goto(this.kmuttLoginURL);

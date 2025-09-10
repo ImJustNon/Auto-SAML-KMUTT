@@ -7,12 +7,14 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@sparticuz/chromium": "^138.0.2",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "fs": "^0.0.1-security",
     "path": "^0.12.7",
-    "playwright": "^1.55.0"
+    "playwright-aws-lambda": "^0.11.0",
+    "playwright-core": "^1.55.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
@@ -24,7 +26,7 @@
   },
   "scripts": {
     "build": "rimraf build && tsc",
-		"start": "node ./build/src/index.js",
-		"dev": "nodemon ./src/index.ts"
+    "start": "node ./build/src/index.js",
+    "dev": "nodemon ./src/index.ts"
   }
 }

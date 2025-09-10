@@ -1,4 +1,5 @@
-import { chromium } from "playwright";
+import { chromium } from "playwright-core";
+import chromiumLambda from "@sparticuz/chromium";
 
 export class SAMLCookies {
     private kmuttEmail: string;
@@ -7,24 +8,30 @@ export class SAMLCookies {
 
     private samlCookies: { [key: string]: string } = {};
 
+    private isServerless: boolean;
     private browserOptions: { 
-        headless: boolean; 
+        headless: boolean;
         args: string[];
+        executablePath?: string | undefined;
     };
 
-    constructor(email: string, password: string, option?: {headless: boolean; args: string[]}) {
+    constructor(email: string, password: string, option: {isServerless: boolean}) {
         this.kmuttEmail = email;
         this.kmuttPassword = password;
 
+        this.isServerless = option.isServerless;
         this.browserOptions = {
-            headless: option?.headless ?? true,
-            args: option?.args ?? ['--no-sandbox', '--disable-setuid-sandbox'],
+            headless: true,
+            args: option.isServerless ? chromiumLambda.args : [],
         };
     }
 
     public async loginAndGetSamlCookies(): Promise<void> {
         // Launch browser
-        const browser = await chromium.launch(this.browserOptions);
+        const browser = await chromium.launch({
+            ...this.browserOptions,
+            executablePath: this.isServerless ? await chromiumLambda.executablePath() : undefined,
+        });
         
         // Create a new browser context and page
         const context = await browser.newContext();
