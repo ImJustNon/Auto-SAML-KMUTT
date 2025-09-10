@@ -71,7 +71,7 @@ export class SAMLCookies {
 
         // Revisit protected page to trigger SimpleSAMLAuthToken
         await page.goto(this.kmuttLoginURL);
-        await page.waitForTimeout(5000); // wait a bit for cookies to be set
+        await page.waitForTimeout(3000); // wait a bit for cookies to be set
 
         // Extract cookies
         // Get SAML cookies
