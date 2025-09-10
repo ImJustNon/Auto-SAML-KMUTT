@@ -87,4 +87,11 @@ export class SAMLCookies {
     getCookies(): { [key: string]: string } {
         return this.samlCookies;
     }
+
+    getErrorMessage(): string | null {
+        if (!this.samlCookies["SimpleSAMLAuthToken"] || !this.samlCookies["SimpleSAMLphp"]) {
+            return "SimpleSAMLAuthToken or SimpleSAMLphp cookie not found. Login may have failed. please try again. Make sure your KMUTT credentials are correct. If the problem persists, there might be changes in the KMUTT authentication system. Please check the logs for more details.";
+        }
+        return null;
+    }
 }
