@@ -50,6 +50,7 @@ Create a `.env` file in the `app/` directory:
 ```
 KMUTT_EMAIL=your_kmutt_email@kmutt.ac.th
 KMUTT_PASSWORD=your_password
+VERCEL=false
 ```
 
 ### 4. Run the server ▶️
