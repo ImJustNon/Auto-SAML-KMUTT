@@ -1,0 +1,11 @@
+.env
+.env.prod
+
+node_modules
+generated/prisma/
+
+moonlink.log
+
+build
+
+.DS_Store
