@@ -17,7 +17,9 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/auto-saml-app';
 const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield mongoose_1.default.connect(MONGODB_URI, {});
+        yield mongoose_1.default.connect(MONGODB_URI, {
+            serverSelectionTimeoutMS: 30000,
+        });
         console.log('MongoDB connected');
     }
     catch (error) {
