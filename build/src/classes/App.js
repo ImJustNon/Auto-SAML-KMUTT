@@ -30,7 +30,7 @@ class App {
     initializeRoutes() {
         this.app.use("/api", new SAML_route_1.default().getRouter());
         this.app.get('/', (req, res) => {
-            res.status(200).json({ message: 'API is running', gay: config_1.config.mongoURI });
+            res.status(200).json({ message: 'API is running' });
         });
     }
     listen() {

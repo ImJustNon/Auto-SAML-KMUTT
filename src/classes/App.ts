@@ -37,7 +37,7 @@ export class App {
         this.app.use("/api", new SAMLRouters().getRouter());
 
         this.app.get('/', (req, res) => {
-            res.status(200).json({ message: 'API is running', gay: config.mongoURI });
+            res.status(200).json({ message: 'API is running'});
         });
     }
 
