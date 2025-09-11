@@ -13,14 +13,12 @@ exports.SAMLController = void 0;
 const SAMLCookies_1 = require("../classes/SAMLCookies");
 const config_1 = require("../config/config");
 const SAMLTokenCache_1 = require("../models/SAMLTokenCache");
-const Mongoose_1 = require("../classes/Mongoose");
 class SAMLController {
     constructor() {
         this.samlToken = new SAMLCookies_1.SAMLCookies(config_1.config.kmuttEmail, config_1.config.kmuttPassword, { isServerless: config_1.config.isServerless });
     }
     request(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield new Mongoose_1.Mongoose(config_1.config.mongoURI).connect();
             const getSAMLCaches = yield SAMLTokenCache_1.SAMLTokenCache.find();
             const sortedByDateSAMLTokenCache = getSAMLCaches.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
             if (this.samlToken.isRunning) {

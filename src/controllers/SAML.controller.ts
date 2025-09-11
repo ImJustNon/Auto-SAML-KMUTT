@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { SAMLCookies } from "../classes/SAMLCookies";
 import { config } from "../config/config";
 import { SAMLTokenCache } from "../models/SAMLTokenCache";
-import { Mongoose } from "../classes/Mongoose";
 
 export class SAMLController {
 
@@ -13,7 +12,6 @@ export class SAMLController {
     }
 
     public async request(req: Request, res: Response) {
-        await new Mongoose(config.mongoURI).connect();
 
         const getSAMLCaches = await SAMLTokenCache.find();
         const sortedByDateSAMLTokenCache = getSAMLCaches.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
