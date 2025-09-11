@@ -35,27 +35,6 @@ export class App {
 
     private initializeRoutes() {
         this.app.use("/api", new SAMLRouters().getRouter());
-        // Example: Add a TokenCache document
-        // this.app.get('/api/token-cache/add', async (req, res) => {
-        //     try {
-        //         const [simpleSAMLphp, simpleSAMLAuthToken] = ["arfawfdsfasdf", "asdasdasdasdasdregergregergergrg"];
-        //         const tokenCache = new SAMLTokenCache({ simpleSAMLphp, simpleSAMLAuthToken });
-        //         const saved = await tokenCache.save();
-        //         res.status(201).json({ message: 'TokenCache saved', data: saved });
-        //     } catch (error) {
-        //         res.status(500).json({ message: 'Error saving TokenCache', error });
-        //     }
-        // });
-
-        // // Example: Read all TokenCache documents
-        // this.app.get('/api/token-cache/get', async (req, res) => {
-        //     try {
-        //         const tokens = await SAMLTokenCache.find();
-        //         res.status(200).json({ message: 'TokenCache list', data: tokens });
-        //     } catch (error) {
-        //         res.status(500).json({ message: 'Error fetching TokenCache', error });
-        //     }
-        // });
 
         this.app.get('/', (req, res) => {
             res.status(200).json({ message: 'API is running' });
