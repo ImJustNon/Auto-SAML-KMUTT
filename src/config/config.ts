@@ -6,4 +6,5 @@ export const config = {
     kmuttEmail: process.env.KMUTT_EMAIL,
     kmuttPassword: process.env.KMUTT_PASSWORD,
     isServerless: process.env.VERCEL === '1' || process.env.VERCEL === 'true' || false,
+    mongoURI: process.env.DB_MONGO_URI || 'mongodb://localhost:27017/auto-saml-app',
 };

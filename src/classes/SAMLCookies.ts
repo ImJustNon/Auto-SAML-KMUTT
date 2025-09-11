@@ -1,5 +1,6 @@
 import { chromium } from "playwright-core";
 import chromiumLambda from "@sparticuz/chromium";
+import { SAMLTokenCache } from "../models/SAMLTokenCache";
 
 export class SAMLCookies {
     private kmuttEmail: string;
@@ -15,6 +16,8 @@ export class SAMLCookies {
         executablePath?: string | undefined;
     };
 
+    public isRunning: boolean = false;
+
     constructor(email: string, password: string, option: {isServerless: boolean}) {
         this.kmuttEmail = email;
         this.kmuttPassword = password;
@@ -27,6 +30,7 @@ export class SAMLCookies {
     }
 
     public async loginAndGetSamlCookies(): Promise<void> {
+        this.isRunning = true;
         // Launch browser
         const browser = await chromium.launch({
             ...this.browserOptions,
@@ -89,6 +93,7 @@ export class SAMLCookies {
         }
 
         await browser.close();
+        this.isRunning = false;
     }
 
     getCookies(): { [key: string]: string } {
@@ -100,5 +105,24 @@ export class SAMLCookies {
             return "SimpleSAMLAuthToken or SimpleSAMLphp cookie not found. Login may have failed. please try again. Make sure your KMUTT credentials are correct. If the problem persists, there might be changes in the KMUTT authentication system. Please check the logs for more details.";
         }
         return null;
+    }
+
+    async createNewAndUpdateToDatabase(): Promise<void> {
+        await this.loginAndGetSamlCookies();
+        this.isRunning = true;
+
+        const newSAMLToken = this.getCookies();
+                
+        try {
+            const tokenCache = new SAMLTokenCache({ 
+                simpleSAMLphp: newSAMLToken['SimpleSAMLphp'], 
+                simpleSAMLAuthToken: newSAMLToken['SimpleSAMLAuthToken'] 
+            });
+            await tokenCache.save();
+        } catch (error) {
+            console.error('Error saving TokenCache:', error);
+        }
+
+        this.isRunning = false;
     }
 }

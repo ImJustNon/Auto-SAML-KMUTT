@@ -12,6 +12,7 @@
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "fs": "^0.0.1-security",
+    "mongoose": "^8.18.1",
     "path": "^0.12.7",
     "playwright-aws-lambda": "^0.11.0",
     "playwright-core": "^1.55.0"
