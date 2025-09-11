@@ -4,8 +4,8 @@ const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/auto-s
 
 export const connectDB = async () => {
   try {
-    await mongoose.connect(MONGODB_URI, {
-      // useNewUrlParser and useUnifiedTopology are default in mongoose >=6
+    await mongoose.connect(MONGODB_URI, { 
+      serverSelectionTimeoutMS: 30000,
     });
     console.log('MongoDB connected');
   } catch (error) {
