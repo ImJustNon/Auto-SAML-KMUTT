@@ -14,27 +14,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Mongoose = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
-let isConnected = false;
 class Mongoose {
     constructor(uri) {
         this.uri = uri;
     }
     connect() {
         return __awaiter(this, void 0, void 0, function* () {
-            if (isConnected) {
-                return;
-            }
             try {
-                const db = yield mongoose_1.default.connect(this.uri, {
+                yield mongoose_1.default.connect(this.uri, {
                     bufferCommands: false,
                     serverSelectionTimeoutMS: 30000,
                 });
-                isConnected = db.connections[0].readyState === 1;
-                console.log("[Log] MongoDB connected");
+                console.log('[Log] MongoDB connected');
             }
             catch (error) {
-                console.error("[Error] MongoDB connection error:", error);
-                throw error;
+                console.error('[Error] MongoDB connection error:', error);
+                process.exit(1);
             }
         });
     }
