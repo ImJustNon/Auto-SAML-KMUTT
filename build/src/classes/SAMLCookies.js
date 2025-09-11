@@ -15,10 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SAMLCookies = void 0;
 const playwright_core_1 = require("playwright-core");
 const chromium_1 = __importDefault(require("@sparticuz/chromium"));
+const SAMLTokenCache_1 = require("../models/SAMLTokenCache");
 class SAMLCookies {
     constructor(email, password, option) {
         this.kmuttLoginURL = 'https://dl.lib.kmutt.ac.th/repository/loadfile.php?obj_id=5749';
         this.samlCookies = {};
+        this.isRunning = false;
         this.kmuttEmail = email;
         this.kmuttPassword = password;
         this.isServerless = option.isServerless;
@@ -29,6 +31,7 @@ class SAMLCookies {
     }
     loginAndGetSamlCookies() {
         return __awaiter(this, void 0, void 0, function* () {
+            this.isRunning = true;
             const browser = yield playwright_core_1.chromium.launch(Object.assign(Object.assign({}, this.browserOptions), { executablePath: this.isServerless ? yield chromium_1.default.executablePath() : undefined }));
             const context = yield browser.newContext();
             const page = yield context.newPage();
@@ -71,6 +74,7 @@ class SAMLCookies {
                 console.log("[Log] SimpleSAML cookies not found");
             }
             yield browser.close();
+            this.isRunning = false;
         });
     }
     getCookies() {
@@ -81,6 +85,24 @@ class SAMLCookies {
             return "SimpleSAMLAuthToken or SimpleSAMLphp cookie not found. Login may have failed. please try again. Make sure your KMUTT credentials are correct. If the problem persists, there might be changes in the KMUTT authentication system. Please check the logs for more details.";
         }
         return null;
+    }
+    createNewAndUpdateToDatabase() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.loginAndGetSamlCookies();
+            this.isRunning = true;
+            const newSAMLToken = this.getCookies();
+            try {
+                const tokenCache = new SAMLTokenCache_1.SAMLTokenCache({
+                    simpleSAMLphp: newSAMLToken['SimpleSAMLphp'],
+                    simpleSAMLAuthToken: newSAMLToken['SimpleSAMLAuthToken']
+                });
+                yield tokenCache.save();
+            }
+            catch (error) {
+                console.error('Error saving TokenCache:', error);
+            }
+            this.isRunning = false;
+        });
     }
 }
 exports.SAMLCookies = SAMLCookies;
